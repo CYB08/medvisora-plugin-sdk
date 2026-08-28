@@ -1,0 +1,6 @@
+# Core I/O + numerics for reading and writing masks in run_inference().
+SimpleITK>=2.2.1
+numpy>=1.24
+
+# Add your framework here, e.g. nnUNet inference stack (torch is in the base image):
+# nnunetv2>=2.2

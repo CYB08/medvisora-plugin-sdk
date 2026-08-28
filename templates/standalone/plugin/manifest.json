@@ -1,0 +1,21 @@
+{
+  "key": "my_model",
+  "team": "YourTeam",
+  "name": "My Model",
+  "version": "v1.0",
+  "desc": "Single-node segmentation plugin.",
+  "modality": "CT",
+  "task": ["segmentation"],
+  "docker": { "image": "my-model:1.0" },
+  "nodes": [
+    {
+      "id": "inference",
+      "title": "AI Inference",
+      "category": "ai_segment",
+      "outputs": [
+        { "model": 1, "label": 2 }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,44 @@
+{
+  "key": "my_lung_nodule_det",
+  "team": "YourTeam",
+  "name": "Lung Nodule Detection Example",
+  "version": "v1.0",
+  "desc": "Two-stage workflow: segmentation defines the region of interest, detection reports the targets inside it",
+  "modality": "CT",
+  "task": ["detection"],
+  "docker": { "image": "my-lung-nodule:1.0", "ipc": "host" },
+  "nodes": [
+    {
+      "id": "stage_seg",
+      "title": "Lung Segmentation",
+      "category": "ai_segment"
+    },
+    {
+      "id": "stage_detect",
+      "title": "Nodule Detection",
+      "category": "ai_detect"
+    }
+  ],
+  "default_workflow": {
+    "nodes": [
+      { "kind": "image_input" },
+      { "kind": "stage_seg" },
+      {
+        "kind": "roi_crop",
+        "params": {
+          "crop_mode":        "filter",
+          "filter_dilate_mm": [5, 5, 5]
+        }
+      },
+      { "kind": "stage_detect" },
+      { "kind": "display_output" }
+    ],
+    "edges": [
+      ["image_input.image",       "stage_seg.image"          ],
+      ["image_input.image",       "roi_crop.image"           ],
+      ["stage_seg.mask",          "roi_crop.mask"            ],
+      ["roi_crop.image",          "stage_detect.image"       ],
+      ["stage_detect.detections", "display_output.detections"]
+    ]
+  }
+}

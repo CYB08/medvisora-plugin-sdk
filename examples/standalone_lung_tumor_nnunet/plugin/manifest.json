@@ -1,0 +1,20 @@
+{
+  "key": "my_lung_tumor_seg",
+  "team": "YourTeam",
+  "name": "Lung Tumor Segmentation Example",
+  "version": "v1.0",
+  "desc": "Two-stage lung tumor segmentation (coarse localization, ROI crop, fine segmentation) completed in a single container run",
+  "modality": "CT",
+  "task": ["segmentation"],
+  "docker": { "image": "my-lung-tumor:1.0", "ipc": "host" },
+  "nodes": [
+    {
+      "id": "inference",
+      "title": "AI Inference",
+      "category": "ai_segment",
+      "outputs": [
+        { "model": 1, "label": 5 }
+      ]
+    }
+  ]
+}

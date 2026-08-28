@@ -1,0 +1,6 @@
+# Core I/O + numerics for reading and writing masks in the stage functions.
+SimpleITK>=2.2.1
+numpy>=1.24
+
+# Add your framework here (torch is in the base image), e.g.:
+# nnunetv2>=2.2

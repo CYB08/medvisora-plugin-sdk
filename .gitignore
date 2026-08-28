@@ -1,0 +1,40 @@
+# Model weights: not distributed in this repository. Place your own weights
+# into the corresponding folders before building the image.
+*.pth
+*.pt
+*.onnx
+*.ckpt
+*.safetensors
+*.zip
+
+# nnUNet source is git-cloned into each example's docker/nnUNet/, not tracked.
+nnUNet/
+
+# Weight placeholder folders: keep only the instruction file.
+nnUNet_results/*
+!nnUNet_results/README.md
+model/*
+!model/README.md
+
+# Imaging data and inference intermediates: never commit patient data.
+*.nii
+*.nii.gz
+*.nrrd
+*.mha
+*.mhd
+*.dcm
+*.h5
+*.pkl
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

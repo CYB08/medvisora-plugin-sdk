@@ -1,0 +1,22 @@
+{
+  "key": "my_organ_seg",
+  "team": "YourTeam",
+  "name": "Organ Segmentation Example",
+  "version": "v1.0",
+  "desc": "Single-node multi-structure segmentation",
+  "modality": "CT",
+  "task": ["segmentation"],
+  "docker": { "image": "my-organ-seg:1.0", "ipc": "host" },
+  "nodes": [
+    {
+      "id": "inference",
+      "title": "AI Inference",
+      "category": "ai_segment",
+      "outputs": [
+        { "model": 1, "label": 1, "group": "Group A" },
+        { "model": 2, "label": 2, "group": "Group A" },
+        { "model": 3, "label": 3, "group": "Group B" }
+      ]
+    }
+  ]
+}

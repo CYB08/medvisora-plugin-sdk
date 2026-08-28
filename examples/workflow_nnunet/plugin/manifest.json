@@ -1,0 +1,47 @@
+{
+  "key": "my_twostage_seg",
+  "team": "YourTeam",
+  "name": "Two-Stage Segmentation Example",
+  "version": "v1.0",
+  "desc": "Two-stage segmentation workflow: resample, coarse localization, ROI crop, fine segmentation, mask restore",
+  "modality": "CT",
+  "task": ["segmentation"],
+  "docker": { "image": "my-twostage-seg:1.0", "ipc": "host" },
+  "nodes": [
+    {
+      "id": "stage_coarse",
+      "title": "Coarse Localization",
+      "category": "ai_segment"
+    },
+    {
+      "id": "stage_fine",
+      "title": "Fine Segmentation",
+      "category": "ai_segment",
+      "outputs": [
+        { "model": 1, "label": 1 },
+        { "model": 2, "label": 2 }
+      ]
+    }
+  ],
+  "default_workflow": {
+    "nodes": [
+      { "kind": "image_input" },
+      { "kind": "resample",   "params": { "target_spacing_mm": [2.0, 2.0, 2.0] } },
+      { "kind": "stage_coarse" },
+      { "kind": "roi_crop",   "params": { "crop_margins_mm": [20, 20, 20] } },
+      { "kind": "stage_fine" },
+      { "kind": "mask_restore" },
+      { "kind": "display_output" }
+    ],
+    "edges": [
+      ["image_input.image",  "resample.image"      ],
+      ["resample.image",     "stage_coarse.image"  ],
+      ["image_input.image",  "roi_crop.image"      ],
+      ["stage_coarse.mask",  "roi_crop.mask"       ],
+      ["roi_crop.image",     "stage_fine.image"    ],
+      ["stage_fine.mask",    "mask_restore.mask"   ],
+      ["roi_crop.bbox",      "mask_restore.bbox"   ],
+      ["mask_restore.mask",  "display_output.mask" ]
+    ]
+  }
+}
