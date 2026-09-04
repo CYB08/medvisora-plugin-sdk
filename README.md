@@ -20,4 +20,8 @@ Integration takes two steps: build the inference image, then register it through
 
 `templates/` provides a minimal project skeleton: implement its inference entry point and the image is ready to build. `examples/` provides complete cases with deployment steps, described in the [examples guide](examples/README.md). Configuration fields and workflow rules are covered by the [manifest specification](docs/manifest.md) and the [node specification](docs/nodes.md).
 
+## Support
+
+Report bugs, or ask about model integration and image builds, via [Issues](https://github.com/CYB08/medvisora-plugin-sdk/issues) or [medvisora@163.com](mailto:medvisora@163.com).
+
 This repository is distributed under the [LICENSE](LICENSE) in the repository root.

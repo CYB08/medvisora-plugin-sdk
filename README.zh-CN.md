@@ -20,4 +20,8 @@ MedVisora 是面向医学影像的模型集成与工作流平台，将模型推�
 
 `templates/` 提供最小项目骨架，实现其中的推理入口即可构建镜像；`examples/` 提供完整案例与部署步骤，详见[示例文档](examples/README.zh-CN.md)。配置字段与工作流规范分别见 [manifest 文档](docs/manifest.zh-CN.md)和[节点文档](docs/nodes.zh-CN.md)。
 
+## 反馈
+
+报告 Bug，以及模型接入、镜像构建相关问题，请提交 [Issue](https://github.com/CYB08/medvisora-plugin-sdk/issues)，或发送邮件至 [medvisora@163.com](mailto:medvisora@163.com)。
+
 本仓库依据根目录的 [LICENSE](LICENSE) 分发。
