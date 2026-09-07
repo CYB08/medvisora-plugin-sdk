@@ -101,10 +101,31 @@ An `id` may contain only letters, digits, underscores and hyphens. It must not c
 ```
 
 - `model`: the raw value in the model mask; must be a positive integer and unique within the node
-- `label`: an ID already allocated in the platform's system label table, in the range `1-999`
+- `label`: the platform label the structure maps to; see the two ranges below
+- `semantic`: the structure name; required in the plugin-defined range, forbidden in the system range
 - `group`: optional, used only to group results on the model card
 
-Label names are maintained by the platform, so `outputs` must not declare `semantic`. When `outputs` is omitted, the platform keeps the raw values of the mask. Instance segmentation nodes must not declare `outputs`.
+There are two ranges to choose between:
+
+| Range | Who names the structure | `semantic` |
+| --- | --- | --- |
+| `1-499` | The platform. Use an ID already allocated in its system label table. | Must be omitted |
+| `500-999` | You. For structures the system table does not cover. | Required |
+
+Prefer the system range whenever the structure exists there: those IDs carry a stable name, a fixed colour and a shared meaning across every plugin, so results from different cards stay comparable. Unallocated IDs below `500` are the platform's own expansion room and are rejected — a plugin claiming one would clash with a future platform assignment, and the numbers are what get stored in saved masks.
+
+Use `500-999` for a structure the platform has no ID for. The name comes from your `semantic` and is shown as long as your card is installed; uninstalling the card makes the structure fall back to a placeholder name. Because nothing arbitrates this range globally, registration rejects an ID already claimed by another installed card for a different structure — pick a free one.
+
+```json
+{
+  "outputs": [
+    { "model": 1, "label": 5 },
+    { "model": 2, "label": 500, "semantic": "Bronchus" }
+  ]
+}
+```
+
+When `outputs` is omitted, the platform keeps the raw values of the mask. Instance segmentation nodes must not declare `outputs`.
 
 ### params
 

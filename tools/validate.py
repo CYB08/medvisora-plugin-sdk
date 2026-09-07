@@ -19,15 +19,21 @@ from collections import defaultdict, deque
 from typing import Dict, List, Set, Tuple
 
 # Label regions defined by the plugin spec:
-#   0-999      system presets        -- the only range static `outputs` may claim; the
-#                                       display name is built-in, so `semantic` must be
-#                                       omitted. The id must already exist in the
-#                                       platform's label table; this script checks the
-#                                       range only and registration checks membership
+#   0-499      system presets        -- names are built-in, so `semantic` must be omitted.
+#                                       The id must already exist in the platform's label
+#                                       table; this script checks the range only and
+#                                       registration checks membership
+#   500-999    plugin-defined        -- for structures the system table does not cover.
+#                                       The platform has no name for these ids, so each
+#                                       one must declare a `semantic`. Registration also
+#                                       rejects an id already claimed by another
+#                                       installed card, which only the platform can check
 #   1000-1099  instance segmentation -- reserved for instance labels, which are assigned
 #                                       at runtime, so nothing static may live here
 #   1100-1199  manual drawing        -- belongs to the end user
 SYSTEM_LABEL_MAX = 999
+PLUGIN_LABEL_MIN = 500
+PLUGIN_LABEL_MAX = 999
 INSTANCE_LABEL_MIN = 1000
 INSTANCE_LABEL_MAX = 1099
 MANUAL_LABEL_MIN = 1100
@@ -234,12 +240,23 @@ def _validate_outputs(outputs, loc: str, errors: List[str]) -> None:
         has_semantic = isinstance(semantic, str) and bool(semantic.strip())
         if label > SYSTEM_LABEL_MAX:
             errors.append(
-                f"{oloc}: label {label} is outside the system range 0-{SYSTEM_LABEL_MAX}. "
+                f"{oloc}: label {label} is outside the static range 0-{SYSTEM_LABEL_MAX}. "
                 f"{INSTANCE_LABEL_MIN}-{INSTANCE_LABEL_MAX} is reserved for instance "
                 f"segmentation (labels assigned at runtime) and "
-                f"{MANUAL_LABEL_MIN}+ for manual drawing; map the structure into the "
-                f"system range instead"
+                f"{MANUAL_LABEL_MIN}+ for manual drawing; use a system preset id "
+                f"(0-{PLUGIN_LABEL_MIN - 1}) or a plugin-defined id "
+                f"({PLUGIN_LABEL_MIN}-{PLUGIN_LABEL_MAX}) instead"
             )
+        elif label >= PLUGIN_LABEL_MIN:
+            # Plugin-defined range: the platform has no preset name, so `semantic` is
+            # required rather than optional. Without it the structure would show up as
+            # "Structure 500" -- a result nobody can interpret.
+            if not has_semantic:
+                errors.append(
+                    f"{oloc}: label {label} is in the plugin-defined range "
+                    f"({PLUGIN_LABEL_MIN}-{PLUGIN_LABEL_MAX}) and has no built-in name; "
+                    f"declare a 'semantic' describing the structure"
+                )
         elif has_semantic:
             errors.append(
                 f"{oloc}: system preset label {label} already has a name; "
@@ -564,8 +581,11 @@ def main(argv: List[str]) -> int:
     ok, errors = validate_manifest(manifest, plugin_dir)
     if ok:
         print(f"[OK] {manifest_path} is valid (spec v1.0).")
-        print("     Note: outputs.label is range-checked only; registration verifies "
-              "each id against the platform label table.")
+        print(f"     Note: outputs.label is range-checked only. Registration verifies "
+              f"system ids (0-{PLUGIN_LABEL_MIN - 1}) against the platform label table, "
+              f"and checks that plugin-defined ids "
+              f"({PLUGIN_LABEL_MIN}-{PLUGIN_LABEL_MAX}) are not already claimed by "
+              f"another installed card.")
         return 0
 
     print(f"[INVALID] {manifest_path} has {len(errors)} problem(s):")
