@@ -4,7 +4,7 @@
 
 项目主页：[https://medvisora.com/](https://medvisora.com/)
 
-下载 Windows 安装包：[MedVisora_Setup_1.0.0.exe](https://github.com/CYB08/medvisora-plugin-sdk/releases/download/v1.0.0/MedVisora_Setup_1.0.0.exe)
+下载 Windows 安装包：[MedVisora_Setup_1.1.0.exe](https://github.com/CYB08/medvisora-plugin-sdk/releases/download/v1.1.0/MedVisora_Setup_1.1.0.exe) · [更新内容](https://github.com/CYB08/medvisora-plugin-sdk/releases)
 
 MedVisora 是面向医学影像的模型集成与工作流平台，将模型推理、影像交互与工作流编排整合为一体。通过统一插件规范，将本地模型封装为 Docker 镜像并注册为模型卡，即可复用平台已有的阅片、标注、三维重建与定量分析能力，并在画布中与平台节点自由连接，组成分割、检测与分析等多阶段流程，无需另行开发前端。
 
